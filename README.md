@@ -1,3 +1,52 @@
+# 💄 Virtual Lip-Shades & Blush Try-ons using Gestures  
+
+A fun and interactive web app that lets users virtually try on **lipstick, blush, and eyeshadow** in real-time using their webcam. Makeup overlays are controlled with simple hand gestures for a completely touch-free experience.  
+
+---
+
+## ✨ Features  
+- Real-time face landmark detection using **MediaPipe**  
+- Virtual makeup overlays (lipstick, blush, eyeshadow)  
+- Gesture-based activation and control  
+- Smooth blending for a natural effect  
+- Lightweight, browser-based implementation  
+
+---
+
+## 🖐️ Gesture-Based Control  
+- 👉 **Point to Lips** → Enable lipstick  
+- 👉 **Point to Cheeks** → Enable blush  
+- 👉 **Point to Eyes** → Enable eyeshadow  
+- ✊ **Closed Fist** → Change lipstick shade  
+- ✋ **Open Hand** → Clear all makeup  
+
+---
+
+## 💋 Makeup Overlay  
+- **Lipstick**: Applies color with soft blending for natural look  
+- **Blush**: Adds color to cheeks with smooth fade  
+- **Eyeshadow**: Overlays vibrant or subtle shades on eyelids  
+- **Custom Colors**: Multiple shades available with gesture control  
+- **Reset Option**: Remove all overlays instantly with open hand  
+
+---
+
+## 🚀 Usage  
+1. Open `index.html` in your browser  
+2. Allow **webcam access**  
+3. Use gestures to enable makeup effects  
+4. Switch shades with a fist ✊, reset with open hand ✋  
+
+---
+
+## 🛠 Tech Stack  
+- **HTML5**  
+- **CSS3**  
+- **JavaScript**  
+- **MediaPipe (Hand & Face Landmarks)**  
+- **Canvas API**
+  
+
 # 🧴 Skin Brightness & Type Analysis  
 
 A **real-time skin analysis web app** powered by **MediaPipe FaceMesh** and **OpenCV.js**.  
