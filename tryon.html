@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Beauty Smart Mirror – Try-On</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    #stepLabel {
+      position: absolute; left: 12px; top: 12px; z-index: 3;
+      background: rgba(0,0,0,.5); color: #fff; padding: 8px 12px; border-radius: 10px;
+      font-family: system-ui, Arial, sans-serif; font-size: 14px
+    }
+    #video, #canvas { position: absolute; inset: 0; margin: auto; }
+    #video { transform: scaleX(-1); }   /* selfie view */
+    #canvas { z-index: 2; }
+    body { display:flex; align-items:center; justify-content:center; height:100vh; overflow:hidden; background:#111 }
+    .stage { position: relative; width: 640px; height: 480px }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div id="stepLabel">point to lips/cheeks/eyes • ✋ to reset</div>
+    <video id="video" autoplay muted playsinline></video>
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <!-- Mediapipe -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+
+  <script type="module" src="script-tryon.js"></script>
+</body>
+</html>

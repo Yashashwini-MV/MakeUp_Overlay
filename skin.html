@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Skin Brightness Analysis</title>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
+  <script src="https://docs.opencv.org/4.x/opencv.js"></script>
+</head>
+<body>
+  <video id="video" autoplay playsinline></video>
+  <canvas id="canvas" width="640" height="480"></canvas>
+
+  <script>
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    // Start webcam
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+      video.srcObject = stream;
+    });
+
+    // Initialize FaceMesh
+    const faceMesh = new FaceMesh({
+      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+    });
+
+    faceMesh.setOptions({
+      maxNumFaces: 1,
+      refineLandmarks: true,
+      minDetectionConfidence: 0.5,
+      minTrackingConfidence: 0.5
+    });
+
+    faceMesh.onResults(onResults);
+
+    const camera = new Camera(video, {
+      onFrame: async () => {
+        await faceMesh.send({ image: video });
+      },
+      width: 640,
+      height: 480
+    });
+    camera.start();
+
+    // Helper: Compute brightness of ROI
+    function getMeanBrightness(imageData) {
+      let sum = 0;
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        const r = imageData.data[i];
+        const g = imageData.data[i + 1];
+        const b = imageData.data[i + 2];
+        const brightness = 0.299 * r + 0.587 * g + 0.114 * b; // Luma formula
+        sum += brightness;
+      }
+      return (sum / (imageData.data.length / 4)).toFixed(2);
+    }
+
+    // Extract skin regions
+    function onResults(results) {
+      ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+
+      if (!results.multiFaceLandmarks || results.multiFaceLandmarks.length === 0) return;
+      const landmarks = results.multiFaceLandmarks[0];
+
+      // Example: take bounding box around cheeks, nose, etc.
+      const regions = {
+        forehead: { x: 250, y: 100, w: 140, h: 60 },
+        nose: { x: 280, y: 180, w: 80, h: 80 },
+        leftCheek: { x: 180, y: 200, w: 80, h: 100 },
+        rightCheek: { x: 380, y: 200, w: 80, h: 100 },
+        chin: { x: 260, y: 300, w: 120, h: 80 }
+      };
+
+      let resultsData = {};
+      for (const [name, roi] of Object.entries(regions)) {
+        const imageData = ctx.getImageData(roi.x, roi.y, roi.w, roi.h);
+        const brightness = getMeanBrightness(imageData);
+        resultsData[name] = brightness;
+
+        // Draw ROI for visualization
+        ctx.strokeStyle = "lime";
+        ctx.strokeRect(roi.x, roi.y, roi.w, roi.h);
+      }
+
+      console.log("Skin Brightness:", resultsData);
+    }
+  </script>
+</body>
+</html>
